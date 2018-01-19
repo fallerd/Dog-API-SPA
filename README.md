@@ -1,5 +1,5 @@
 # Dog API SPA App
-_SPA and JSON API Assignment for Web Application Architechture at MSU Denver_
+_SPA and JSON API Assignment for Web Application Architecture at MSU Denver_
 
 This is a single page application that was written as an assignment for learning how to utilize JSON API's. It pulls images and data from the Dog API at dog.ceo. It uses bootstrap and datatables to format, sort, browse, and search the dog data. 
 
