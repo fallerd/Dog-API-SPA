@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Bowser Browser</title>
+  <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style type="text/css">
+  .pup{
+    max-height:100px;
+  }
+
+  .container{
+    max-width:800px;
+    margin:auto;
+  }
+
+  #loading{
+    text-align: center;
+    margin:auto;
+    max-width:256px;
+  }
+
+  #table{
+    display:none;
+  }
+
+  #title{
+    font-size: 200%;
+    font-weight: bold;
+    background-color:lightblue;
+    padding:15px;
+    max-width:800px;
+    display:none;
+    margin-bottom: 20px;
+  }
+
+  .modal-content{
+    background-color: grey;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  *{
+    font-family: arial;
+  }
+</style>
+</head>
+<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+
+    $.holdReady( true );
+    getDogs();
+
+    $(document).ready( function () {
+      loaded();
+      $('#table').on('click', '.pup', function() {
+        $('.modal-content').html("<img src='"+this.src+"'>");
+        $("#imagepop").modal({backdrop: true});
+      });
+    });
+
+    function getDogs(){
+      $.getJSON( "https://dog.ceo/api/breeds/list", function( result ){
+        $.each(result.message, function(i, breed){
+          $.getJSON( "https://dog.ceo/api/breed/"+breed+"/images/random", function( imageResult ) {
+            $("#tbody").append("<tr><td>"+capitalize(breed)+"</td><td><img id='"+breed+"' class='pup' src='"+imageResult.message+"'></td></tr>");
+            if (i==result.message.length-1){
+              $.holdReady( false );
+            }
+          });
+        });
+      });
+    }
+
+    function loaded(){
+      $('#table').DataTable({
+        "pageLength":5,
+        "columnDefs": [
+          { "width": "30%", "targets": 0 }
+        ]
+      });
+      $('#loading').hide();
+      $('#title').show();
+      $('#table').show();
+    }
+
+    function capitalize(string){
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+  </script>
+  
+  <div class="container">
+    <div id="loading">Loading...<br><img src="https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp"></div>
+    <div id="title">Bowser Browser</div>
+    <table id="table" class="display">
+      <thead>
+        <tr>
+          <th>Names</th>
+          <th>Pictures</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="imagepop" role="dialog">
+    <div class="modal-dialog" data-dismiss="modal">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
